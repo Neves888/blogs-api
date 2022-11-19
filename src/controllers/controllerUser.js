@@ -1,21 +1,11 @@
-const jwt = require('jsonwebtoken');
-const authentication = require('../services/serviceUsers');
+const userService = require('../services/serviceUser');
 
-const loginStart = async (req, res) => {
-    const { email, password } = req.body;
-    if (email === '' || password === '') {
-        return res.status(400).json({ message: 'Some required fields are missing' });
-    }
-    const validation = await authentication.isLogin(req.body);
-    if (validation.type) {
-        return res.status(validation.type).json({ message: validation.message });
-    }
-    const requirement = {
-        expiresIn: '1d',
-        algorithm: 'HS256',
-      };
-      const token = jwt.sign({ ...req.body, admin: true }, process.env.JWT_SECRET, requirement);
-  res.status(200).json({ token });
+const insert = async (req, res) => {
+    const { type, message } = await userService.createUser(req.body);
+    if (type) return res.status(type).json({ message });
+    res.status(201).json(message);
 };
 
-module.exports = { loginStart };
+module.exports = {
+    insert,
+};

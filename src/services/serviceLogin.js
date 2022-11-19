@@ -10,4 +10,6 @@ const isLogin = async ({ email, password }) => {
   return { type: null, message: response };
 };
 
-module.exports = { isLogin };
+module.exports = { 
+  isLogin,
+ };
