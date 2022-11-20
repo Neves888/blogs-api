@@ -20,7 +20,14 @@ const { generationToken } = require('../utils/jwtUtils');
     return { type: null, message: users };
   };
 
+  const findUserById = async (id) => {
+    const userId = await User.findByPk(id, { attributes: { exclude: ['password'] } });
+    if (!userId) return { type: 404, message: 'User does not exist' };
+    return { type: null, message: userId };
+  };
+
   module.exports = { 
     createUser,
     findUser,
+    findUserById, 
    };
