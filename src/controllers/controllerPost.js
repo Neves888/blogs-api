@@ -7,7 +7,8 @@ const getPost = async (_req, res) => {
 };
 
 const getPostByUser = async (req, res) => {
-  const { id } = req.user; 
+  const { id } = req.params;
+  // const { type, message } = await postService.getPostByUser(req.user, req.params.id);
   const { type, message } = await postService.getPostByUser(id);
   if (type) return res.status(type).json({ message });
   res.status(200).json(message);

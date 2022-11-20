@@ -19,23 +19,19 @@ return { type: null, message: pots };
 };
 
 const getPostByUser = async (id) => {
-  const post = await await BlogPost.findByPk(id);
-  if (!post) return { type: 404, message: 'Post does not exist' };
-  const pots = await BlogPost.findByPk(id, {
+    const post = await BlogPost.findByPk(id, {
     include: [
-      {
-        model: User,
+      { model: User,
         as: 'user',
-        attributes: { exclude: ['password'] }, 
-      },
-      {
-        model: Category,
+    
+        attributes: { exclude: 'password' } },
+      { model: Category,
         as: 'categories',
-        through: { attributes: [] }, 
-      },
+        through: { attributes: [] } },
     ],
   });
-  return { type: null, message: pots };
+  if (post) return { type: null, message: post };
+  return { type: 404, message: 'Post does not exist' };
   };
 
 module.exports = {
