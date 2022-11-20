@@ -9,12 +9,18 @@ const { generationToken } = require('../utils/jwtUtils');
 
     const newUser = await User.create({ displayName, email, password, image });
 
-    const { password: _, ...user } = newUser;
-
+    const { password: _, ...user } = newUser.dataValues;
+       
     const token = generationToken(user);
     return { type: null, message: { token } };  
   };
 
+  const findUser = async () => {
+    const users = await User.findAll({ attributes: { exclude: ['password'] } });
+    return { type: null, message: users };
+  };
+
   module.exports = { 
     createUser,
+    findUser,
    };

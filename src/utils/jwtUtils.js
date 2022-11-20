@@ -10,13 +10,12 @@ const generationToken = (data) => {
 };
 
 const validationToken = (token) => {
- if (!token) return { type: 401, message: 'No authorization' };
+ if (!token) return { type: 401, message: 'Token not found' };
  try {
   const user = jwt.verify(token, process.env.JWT_SECRET);
   return { type: null, message: user };
  } catch (error) {
-  console.log(error);
-  return { type: 401, message: 'No authorization' };
+  return { type: 401, message: 'Expired or invalid token' };
  }
 };
 
