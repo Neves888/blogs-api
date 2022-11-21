@@ -14,7 +14,26 @@ const getPostByUser = async (req, res) => {
   res.status(200).json(message);
 };
 
+const putPost = async (req, res) => {
+  const { id } = req.params;
+  const { user } = req;
+  const newPost = req.body;
+  const { type, message } = await postService.putPost(id, newPost, user);
+  if (type) return res.status(type).json({ message });
+  res.status(200).json(message);
+};
+
+const deletePost = async (req, res) => {
+  const { id } = req.params;
+  const { email } = req.user;
+  const { type, message } = await postService.deletePost(email, id);
+  if (type) return res.status(type).json({ message });
+  return res.status(500).json({ message: 'Post does not exist' });
+};
+
 module.exports = {
   getPost,
-  getPostByUser, 
+  getPostByUser,
+  putPost,
+  deletePost,
 };

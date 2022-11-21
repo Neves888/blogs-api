@@ -16,9 +16,9 @@ const loginValidation = (body) => {
 };
 
 const loginMiddlewares = (req, res, next) => {
-const { type, message } = loginValidation(req.body); 
-if (type) return res.status(type).json({ message });
-next();
+  const { type, message } = loginValidation(req.body);
+  if (type) return res.status(type).json({ message });
+  next();
 };
 
 module.exports = loginMiddlewares;
