@@ -37,14 +37,14 @@ const putPost = async (idParams, body, user) => {
   return { type: null, message: newPost };
 };
 
-const deletePost = async (idParams, idUser) => {
+const deletePost = async (idParams, userId) => {
   const postGetUser = await BlogPost.findByPk(idParams, { 
-    where: { userId: idUser } });
+    where: userId });
   if (!postGetUser) return { type: 404, message: 'Post does not exist' };
   // console.log(typeof postGetUser.dataValues.userId);
-  // console.log(typeof idUser);
+  // console.log(typeof userId);
   // console.log(postGetUser.dataValues.userId === 2);
-  if (postGetUser.dataValues.userId !== idUser) {
+  if (postGetUser.dataValues.userId !== userId) {
     return { type: 401, message: 'Unauthorized user' };
   }
   await BlogPost.destroy({ where: { id: idParams } });
