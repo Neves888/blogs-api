@@ -9,7 +9,9 @@ module.exports = {
         references: {
           model: 'blog_posts',
           key: 'id',
-        }
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       category_id: {
         primaryKey: true,
@@ -17,7 +19,9 @@ module.exports = {
         references: {
           model: 'categories',
           key: 'id',
-        }
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
     });
   },

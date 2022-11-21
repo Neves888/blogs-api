@@ -1,5 +1,4 @@
 const { BlogPost, User, Category } = require('../models');
-const userService = require('./serviceUser');
 
 const getPost = async () => {
   const pots = await BlogPost.findAll({
@@ -38,25 +37,17 @@ const putPost = async (idParams, body, user) => {
   return { type: null, message: newPost };
 };
 
-const userGetPostId = async (id) => {
-  const post = await BlogPost.findOne({
-    where: { id },
-  });
-  if (!post) return undefined;
-  return post.userId;
-};
-
-const deletePost = async (emailUser, postId) => {
-  const idUser = await userService.userEmail(emailUser);
-  const postUserId = await userGetPostId(postId);
-  const post = await getPostByUser(postId);
-  if (post.type) return { type: post.type, message: post.message };
-
-  const grantAccess = idUser === postUserId;
-  if (!grantAccess) return { type: 'UNAUTHORIZED_USER', message: 'Unauthorized user' };
-
-  await getPost.destroy({ where: { postId } });
-  await BlogPost.destroy({ where: { id: postId } });
+const deletePost = async (idParams, idUser) => {
+  const postGetUser = await BlogPost.findByPk(idParams, { 
+    where: { userId: idUser } });
+  if (!postGetUser) return { type: 404, message: 'Post does not exist' };
+  // console.log(typeof postGetUser.dataValues.userId);
+  // console.log(typeof idUser);
+  // console.log(postGetUser.dataValues.userId === 2);
+  if (postGetUser.dataValues.userId !== idUser) {
+    return { type: 401, message: 'Unauthorized user' };
+  }
+  await BlogPost.destroy({ where: { id: idParams } });
   return { type: null, message: '' };
 };
 

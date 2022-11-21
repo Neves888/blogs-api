@@ -23,12 +23,11 @@ const putPost = async (req, res) => {
   res.status(200).json(message);
 };
 
-const deletePost = async (req, res) => {
-  const { id } = req.params;
-  const { email } = req.user;
-  const { type, message } = await postService.deletePost(email, id);
+const deletePost = async (req, res) => {  
+  const { type, message } = await postService.deletePost(req.params.id, req.user.dataValues.id);
+  console.log(req.params.id, req.user.dataValues.id);
   if (type) return res.status(type).json({ message });
-  return res.status(500).json({ message: 'Post does not exist' });
+  return res.status(204).json(message);
 };
 
 module.exports = {
