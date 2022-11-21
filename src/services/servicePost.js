@@ -1,4 +1,4 @@
-const { BlogPost, User, Category } = require('../models');
+const { BlogPost, User, Category, PostCategory } = require('../models');
 
 const getPost = async () => {
   const pots = await BlogPost.findAll({
@@ -37,9 +37,30 @@ const putPost = async (idParams, body, user) => {
   return { type: null, message: newPost };
 };
 
+const creatPost = async (body, user) => {
+  const { categoryIds, title, content } = body;
+  const arr = await Promise.all(categoryIds.map((el) => Category.findByPk(el)));
+  if (arr.includes(null)) return { type: 400, message: 'one or more "categoryIds" not found' };
+
+  const newPostBlog = await BlogPost.create({
+    title,
+    content,
+    userId: user.id,
+    published: new Date(),
+    updated: new Date(),
+  });
+  
+  await Promise.all(categoryIds.map((el) => PostCategory.create({ 
+  postId: newPostBlog.dataValues.id,
+  categoryId: el,
+  })));
+  return { type: null, message: newPostBlog.dataValues };
+};
+
 const deletePost = async (idParams, userId) => {
-  const postGetUser = await BlogPost.findByPk(idParams, { 
-    where: userId });
+  const postGetUser = await BlogPost.findByPk(idParams, {
+    where: userId,
+  });
   if (!postGetUser) return { type: 404, message: 'Post does not exist' };
   // console.log(typeof postGetUser.dataValues.userId);
   // console.log(typeof userId);
@@ -55,5 +76,6 @@ module.exports = {
   getPost,
   getPostByUser,
   putPost,
+  creatPost,
   deletePost,
 };

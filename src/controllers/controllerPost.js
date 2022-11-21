@@ -23,9 +23,16 @@ const putPost = async (req, res) => {
   res.status(200).json(message);
 };
 
-const deletePost = async (req, res) => {  
+const creatPost = async (req, res) => {
+  const { body, user } = req;
+  const { type, message } = await postService.creatPost(body, user.dataValues);
+  if (type) return res.status(type).json({ message });
+  res.status(201).json(message);
+};
+
+const deletePost = async (req, res) => {
   const { type, message } = await postService.deletePost(req.params.id, req.user.dataValues.id);
-  console.log(req.params.id, req.user.dataValues.id);
+  // console.log(req.params.id, req.user.dataValues.id);
   if (type) return res.status(type).json({ message });
   return res.status(204).json(message);
 };
@@ -34,5 +41,6 @@ module.exports = {
   getPost,
   getPostByUser,
   putPost,
+  creatPost,
   deletePost,
 };
