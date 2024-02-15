@@ -1,4 +1,4 @@
-# Projeto: CRUD de Blog utilizando Node.js e Sequelize 📝💻
+# CRUD de Blog utilizando Node.js e Sequelize 📝💻
 
 Bem-vindo ao projeto de desenvolvimento de um CRUD para um blog! Neste projeto, foi criada uma aplicação para gerenciar conteúdos de um blog, utilizando uma API e um banco de dados. 
 
